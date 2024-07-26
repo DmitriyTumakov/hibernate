@@ -16,11 +16,7 @@ public class DataBaseRepository {
     public DataBaseRepository() {}
 
     public List<Persons> getPersonsByCity(String city) {
-        List<Persons> result = new ArrayList<Persons>();
-        List<Persons> personsList = entityManager.createQuery("from Persons where cityOfLiving like :city", Persons.class)
+        return entityManager.createQuery("from Persons where cityOfLiving like :city", Persons.class)
                 .setParameter("city", city).getResultList();
-
-
-        return result;
     }
 }
