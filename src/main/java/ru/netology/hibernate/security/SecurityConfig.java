@@ -4,8 +4,8 @@ import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +14,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 @Configuration
 public class SecurityConfig {
     @Bean
@@ -39,9 +39,9 @@ public class SecurityConfig {
     @Bean
     public UserDetailsManager userDetailsManager() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("admin").password(encoder().encode("admin")).authorities("by-age", "by-name").build());
-        manager.createUser(User.withUsername("user1").password(encoder().encode("password1")).authorities("by-age").build());
-        manager.createUser(User.withUsername("user2").password(encoder().encode("password2")).authorities("by-name").build());
+        manager.createUser(User.withUsername("admin").password(encoder().encode("admin")).roles("DELETE").build());
+        manager.createUser(User.withUsername("user1").password(encoder().encode("password1")).roles("WRITE").build());
+        manager.createUser(User.withUsername("user2").password(encoder().encode("password2")).roles("READ").build());
         return manager;
     }
 }
